@@ -89,7 +89,7 @@ Requirements:
       } else if (error.message.includes("Failed to fetch")) {
         errorMessage = "There was a network error. Please check your internet connection.";
       } else {
- errorMessage = "An unexpected error occurred. Please try again.";
+        errorMessage = "An unexpected error occurred. Please try again.";
       }
     }
 
