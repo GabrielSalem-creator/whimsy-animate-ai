@@ -1,5 +1,5 @@
 import { toast } from "@/components/ui/use-toast";
-import { CohereClientV2 } from 'cohere-ai'; // Import the CohereClientV2
+const { CohereClientV2 } = require('cohere-ai');
 
 const COHERE_API_KEY = "LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97";
 
