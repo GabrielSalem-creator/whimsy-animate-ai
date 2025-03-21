@@ -22,7 +22,10 @@ const simulateCohereResponse = async (prompt: string): Promise<CohereResponse> =
       ],
     });
 
-    // Assuming the response contains the text in the expected format
+    if (!response.body || !response.body.generations || response.body.generations.length === 0) {
+      throw new Error("No generations found in response");
+    }
+
     const text = response.body.generations[0].text; // Adjust based on the actual response structure
     return { text };
   } catch (error) {
