@@ -1,19 +1,24 @@
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { CohereClientV2 } from 'cohere-ai';
 
-const COHERE_API_KEY = "LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97";
+const COHERE_API_KEY = 'LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97';
+const COHERE_MODEL = 'command-a-03-2025';
+
 const cohere = new CohereClientV2({
   token: COHERE_API_KEY,
 });
 
 type CohereResponse = {
-  text: string;
+  html: string;
+  css: string;
 };
 
 const simulateCohereResponse = async (prompt: string): Promise<CohereResponse> => {
   try {
+    console.log('Sending message to Cohere:', prompt);
+    
     const response = await cohere.chat({
-      model: 'command-a-03-2025',
+      model: COHERE_MODEL,
       messages: [
         {
           role: 'user',
@@ -22,20 +27,21 @@ const simulateCohereResponse = async (prompt: string): Promise<CohereResponse> =
       ],
     });
 
-    if (!response.body || !response.body.generations || response.body.generations.length === 0) {
-      throw new Error("No generations found in response");
+    // Assuming the response contains the text in the expected format
+    const parts = response.body.generations[0].text.split("---CSS---");
+    
+    if (parts.length !== 2) {
+      throw new Error("Invalid response format from AI");
     }
-
-    const text = response.body.generations[0].text; // Adjust based on the actual response structure
-    return { text };
+    
+    const html = parts[0].trim();
+    const css = parts[1].trim();
+    
+    return { html, css };
   } catch (error) {
     console.error("Error in simulateCohereResponse:", error);
-    toast({
-      title: "API Error",
-      description: "There was an error connecting to the AI service. Please try again later.",
-      variant: "destructive",
-    });
-    throw error;
+    toast.error('Failed to connect to AI service');
+    throw new Error("Sorry, I encountered an issue. Please try again later.");
   }
 };
 
@@ -87,23 +93,10 @@ Requirements:
     
     const response = await simulateCohereResponse(systemPrompt + userMessage);
     
-    const parts = response.text.split("---CSS---");
-    
-    if (parts.length !== 2) {
-      throw new Error("Invalid response format from AI");
-    }
-    
-    const html = parts[0].trim();
-    const css = parts[1].trim();
-    
-    return { html, css };
+    return response; // This will return the HTML and CSS as an object
   } catch (error) {
     console.error("Error calling Cohere API:", error);
-    toast({
-      title: "API Error",
-      description: "There was an error connecting to the AI service. Please try again later.",
-      variant: "destructive",
-    });
+    toast.error('Failed to connect to AI service');
     throw error;
   }
 };
