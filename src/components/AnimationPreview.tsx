@@ -11,6 +11,10 @@ type AnimationPreviewProps = {
   onRegenerate: () => void;
 };
 
+const removeHtmlTags = (html: string) => {
+  return html.replace(/<[^>]*>/g, '');
+};
+
 const AnimationPreview = ({ html, css, isGenerating, onRegenerate }: AnimationPreviewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
@@ -125,14 +129,17 @@ ${html}
                 </div>
               </TabsContent>
               
-              < <TabsContent value="code" className="mt-0">
+              <TabsContent value="code" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
                     <div className="flex items-center mb-2">
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">HTML</h4>
                     </div>
+                    {/* Display HTML with or without tags */}
                     <div className="text-xs whitespace-pre-wrap">{html}</div>
+                    {/* Or without tags (not recommended) */}
+                    {/* <div className="text-xs whitespace-pre-wrap">{removeHtmlTags(html)}</div> */}
                   </div>
                   
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
