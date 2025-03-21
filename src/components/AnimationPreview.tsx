@@ -122,10 +122,10 @@ ${html}
                   <p className="text-sm text-muted-foreground text-center">
                     Your animation is displayed above. Download it or view the code.
                   </p>
- </div>
+                </div>
               </TabsContent>
               
-              <TabsContent value="code" className="mt-0">
+              < <TabsContent value="code" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
                     <div className="flex items-center mb-2">
