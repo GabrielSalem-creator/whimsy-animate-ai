@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -123,7 +122,7 @@ ${html}
                   <p className="text-sm text-muted-foreground text-center">
                     Your animation is displayed above. Download it or view the code.
                   </p>
-                </div>
+ </div>
               </TabsContent>
               
               <TabsContent value="code" className="mt-0">
@@ -133,7 +132,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">HTML</h4>
                     </div>
-                    <pre className="text-xs whitespace-pre-wrap">{html}</pre>
+                    <div className="text-xs whitespace-pre-wrap">{html}</div>
                   </div>
                   
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
@@ -141,7 +140,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">CSS</h4>
                     </div>
-                    <pre className="text-xs whitespace-pre-wrap">{css}</pre>
+                    <div className="text-xs whitespace-pre-wrap">{css}</div>
                   </div>
                 </div>
               </TabsContent>
