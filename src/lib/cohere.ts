@@ -8,10 +8,6 @@ const cohere = new CohereClientV2({
   token: COHERE_API_KEY,
 });
 
-type CohereResponse = {
-  text: string;
-};
-
 export const generateAnimation = async (prompt: string): Promise<{ html: string, css: string }> => {
   try {
     const systemPrompt = `You are an expert HTML/CSS animation creator. Your task is to convert user prompts into detailed, working HTML and CSS animations. Follow these strict guidelines:
@@ -71,7 +67,7 @@ Requirements:
       throw new Error("Invalid response format from AI");
     }
 
-    const data: CohereResponse = response.generations[0].text;
+    const data = response.generations[0].text; // Get the generated text
     const parts = data.split("---CSS---");
 
     if (parts.length !== 2) {
@@ -84,9 +80,22 @@ Requirements:
     return { html, css };
   } catch (error) {
     console.error("Error calling Cohere API:", error);
+    let errorMessage = "There was an error connecting to the AI service. Please try again later.";
+
+    // Provide more specific error messages based on the error
+    if (error instanceof Error) {
+      if (error.message.includes("Invalid response format")) {
+        errorMessage = "The response from the AI was not in the expected format. Please try a different prompt.";
+      } else if (error.message.includes("Failed to fetch")) {
+        errorMessage = "There was a network error. Please check your internet connection.";
+      } else {
+ errorMessage = "An unexpected error occurred. Please try again.";
+      }
+    }
+
     toast({
       title: "API Error",
-      description: "There was an error connecting to the AI service. Please try again later.",
+      description: errorMessage,
       variant: "destructive",
     });
     throw error;

@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ const AnimationPreview = ({ html, css, isGenerating, onRegenerate }: AnimationPr
   }, [html, css]);
 
   const handleDownload = () => {
+    // Create combined HTML file with embedded CSS
     const fullHtml = `
 <!DOCTYPE html>
 <html>
@@ -51,6 +53,7 @@ ${html}
 </body>
 </html>`;
 
+    // Create a blob and download link
     const blob = new Blob([fullHtml], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -117,7 +120,7 @@ ${html}
               
               <TabsContent value="preview" className="mt-0">
                 <div className="flex justify-center items-center p-4">
-                  <p className="text-sm text-muted-foreground text -center">
+                  <p className="text-sm text-muted-foreground text-center">
                     Your animation is displayed above. Download it or view the code.
                   </p>
                 </div>
