@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 
 const COHERE_API_KEY = 'LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97';
