@@ -17,7 +17,7 @@ const simulateCohereResponse = async (prompt: string): Promise<CohereResponse> =
       },
       body: JSON.stringify({
         prompt: prompt,
-        max_tokens: 150, // Adjust as needed
+        max_tokens: 1000, // Adjust as needed
       }),
     });
 
