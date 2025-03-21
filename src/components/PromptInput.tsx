@@ -39,9 +39,22 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
       });
     } catch (error) {
       console.error("Error generating animation:", error);
+      let errorMessage = "There was an error generating your animation. Please try again.";
+      
+      // Check the type of error and set a specific message
+      if (error instanceof Error) {
+        if (error.message.includes("Invalid response format")) {
+          errorMessage = "The response from the AI was not in the expected format. Please try a different prompt.";
+        } else if (error.message.includes("Failed to fetch")) {
+          errorMessage = "There was a network error. Please check your internet connection.";
+        } else {
+          errorMessage = "An unexpected error occurred. Please try again.";
+        }
+      }
+      
       toast({
         title: "Generation failed",
-        description: "There was an error generating your animation. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -87,7 +100,7 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
               >
                 {isGenerating ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin " />
                     <span>Generating...</span>
                   </>
                 ) : (
@@ -96,7 +109,8 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </>
                 )}
-              </Button> </motion.div>
+              </Button>
+            </motion.div>
           </div>
         </form>
       </div>
