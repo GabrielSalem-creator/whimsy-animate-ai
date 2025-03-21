@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -9,10 +10,6 @@ type AnimationPreviewProps = {
   css: string;
   isGenerating: boolean;
   onRegenerate: () => void;
-};
-
-const removeHtmlTags = (html: string) => {
-  return html.replace(/<[^>]*>/g, '');
 };
 
 const AnimationPreview = ({ html, css, isGenerating, onRegenerate }: AnimationPreviewProps) => {
@@ -136,10 +133,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">HTML</h4>
                     </div>
-                    {/* Display HTML with or without tags */}
-                    <div className="text-xs whitespace-pre-wrap">{html}</div>
-                    {/* Or without tags (not recommended) */}
-                    {/* <div className="text-xs whitespace-pre-wrap">{removeHtmlTags(html)}</div> */}
+                    <pre className="text-xs whitespace-pre-wrap">{html}</pre>
                   </div>
                   
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
@@ -147,7 +141,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">CSS</h4>
                     </div>
-                    <div className="text-xs whitespace-pre-wrap">{css}</div>
+                    <pre className="text-xs whitespace-pre-wrap">{css}</pre>
                   </div>
                 </div>
               </TabsContent>
