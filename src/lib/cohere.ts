@@ -1,7 +1,10 @@
 import { toast } from "@/components/ui/use-toast";
+import { CohereClientV2 } from 'cohere-ai';
 
 const COHERE_API_KEY = "LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97";
-const COHERE_API_URL = "https://api.cohere.ai/v1/chat";
+const cohere = new CohereClientV2({
+  token: COHERE_API_KEY,
+});
 
 type CohereResponse = {
   text: string;
@@ -9,26 +12,19 @@ type CohereResponse = {
 
 const simulateCohereResponse = async (prompt: string): Promise<CohereResponse> => {
   try {
-    const response = await fetch(COHERE_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${COHERE_API_KEY}`,
-      },
-      body: JSON.stringify({
-        prompt: prompt,
-        max_tokens: 1000, // Adjust as needed
-      }),
+    const response = await cohere.chat({
+      model: 'command-a-03-2025',
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch from Cohere API");
-    }
-
-    const data = await response.json();
-    
     // Assuming the response contains the text in the expected format
-    return { text: data.text };
+    const text = response.body.generations[0].text; // Adjust based on the actual response structure
+    return { text };
   } catch (error) {
     console.error("Error in simulateCohereResponse:", error);
     toast({
