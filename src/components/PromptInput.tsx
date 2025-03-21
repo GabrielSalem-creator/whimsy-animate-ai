@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
@@ -97,8 +96,7 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </>
                 )}
-              </Button>
-            </motion.div>
+              </Button> </motion.div>
           </div>
         </form>
       </div>

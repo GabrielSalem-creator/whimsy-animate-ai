@@ -1,24 +1,35 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import PromptInput from '@/components/PromptInput';
 import AnimationPreview from '@/components/AnimationPreview';
 import { ArrowDown, Wand2 } from 'lucide-react';
+import { generateAnimation } from '@/utils/cohere'; // Import the function to generate animation
 
 const Index = () => {
   const [htmlCode, setHtmlCode] = useState('');
   const [cssCode, setCssCode] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleGenerateAnimation = (html: string, css: string) => {
-    setHtmlCode(html);
-    setCssCode(css);
+  const handleGenerateAnimation = async (prompt: string) => {
+    setIsGenerating(true);
+    try {
+      const { html, css } = await generateAnimation(prompt);
+      setHtmlCode(html);
+      setCssCode(css);
+    } catch (error) {
+      console.error("Error generating animation:", error);
+      toast({
+        title: "Generation Error",
+        description: "There was an error generating the animation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleRegenerate = () => {
-    setIsGenerating(true);
-    // Simulate clearing the current animation
     setHtmlCode('');
     setCssCode('');
   };
@@ -69,7 +80,7 @@ const Index = () => {
           </motion.div>
           
           <motion.div 
-            className="mt-8 sm:mt-12 flex justify-center"
+            className="mt-8 sm:mt- 12 flex justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
