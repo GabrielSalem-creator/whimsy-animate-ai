@@ -1,7 +1,12 @@
 import { toast } from "@/components/ui/use-toast";
+import { CohereClientV2 } from 'cohere-ai'; // Import the CohereClientV2
 
 const COHERE_API_KEY = "LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97";
-const COHERE_API_URL = "https://api.cohere.ai/v1/chat";
+
+// Initialize the Cohere client
+const cohere = new CohereClientV2({
+  token: COHERE_API_KEY,
+});
 
 type CohereResponse = {
   text: string;
@@ -53,26 +58,21 @@ Requirements:
 
     console.log("Sending enhanced request to Cohere...");
 
-    // Send the request to the Cohere API
-    const response = await fetch(COHERE_API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${COHERE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: `${systemPrompt}\n\n${userMessage}`,
-        max_tokens: 1500, // Adjust as needed
-        temperature: 0.7, // Adjust for creativity
-      }),
+    // Send the request to the Cohere API using the CohereClientV2
+    const response = await cohere.chat({
+      model: 'command-a-03-2025',
+      messages: [
+        { role: 'user', content: `${systemPrompt}\n\n${userMessage}` },
+      ],
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch from Cohere API");
+    // Check if the response is valid
+    if (!response || !response.generations || response.generations.length === 0) {
+      throw new Error("Invalid response format from AI");
     }
 
-    const data: CohereResponse = await response.json();
-    const parts = data.text.split("---CSS---");
+    const data: CohereResponse = response.generations[0].text;
+    const parts = data.split("---CSS---");
 
     if (parts.length !== 2) {
       throw new Error("Invalid response format from AI");
