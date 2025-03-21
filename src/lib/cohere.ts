@@ -1,11 +1,12 @@
 import { toast } from "@/components/ui/use-toast";
+import { CohereClientV2 } from 'cohere-ai'; // Import the CohereClientV2
 
 const COHERE_API_KEY = "LIKR6AGC89QCRUyaxIGGnzvxzofYOx6gRCOjDX97";
-const COHERE_API_URL = "https://api.cohere.ai/v1/chat";
 
-type CohereResponse = {
-  text: string;
-};
+// Initialize the Cohere client
+const cohere = new CohereClientV2({
+  token: COHERE_API_KEY,
+});
 
 export const generateAnimation = async (prompt: string): Promise<{ html: string, css: string }> => {
   try {
@@ -52,27 +53,60 @@ Requirements:
 - Return just the HTML and CSS code separated by ---CSS---`;
 
     console.log("Sending enhanced request to Cohere...");
-    
-    const response = await simulateCohereResponse(prompt);
-    
-    const parts = response.text.split("---CSS---");
-    
+
+    // Send the request to the Cohere API using the CohereClientV2
+    const response = await cohere.chat({
+      model: 'command-a-03-2025',
+      messages: [
+        { role: 'user', content: `${systemPrompt}\n\n${userMessage}` },
+      ],
+    });
+
+    // Log the response from the model
+    console.log("Cohere API Response:", response);
+
+    // Check if the response is valid
+    if (!response || !response.generations || response.generations.length === 0) {
+      throw new Error("Invalid response format from AI");
+    }
+
+    const data = response.generations[0].text; // Get the generated text
+    console.log("Generated Text:", data); // Log the generated text
+
+    const parts = data.split("---CSS---");
+
     if (parts.length !== 2) {
       throw new Error("Invalid response format from AI");
     }
-    
+
     const html = parts[0].trim();
     const css = parts[1].trim();
+
+    // Log the generated HTML and CSS
+    console.log("Generated HTML:", html);
+    console.log("Generated CSS:", css);
     
     return { html, css };
   } catch (error) {
     console.error("Error calling Cohere API:", error);
+    let errorMessage = "There was an error connecting to the AI service. Please try again later.";
+
+    // Provide more specific error messages based on the error
+    if (error instanceof Error) {
+      if (error.message.includes("Invalid response format")) {
+        errorMessage = "The response from the AI was not in the expected format. Please try a different prompt.";
+      } else if (error.message.includes("Failed to fetch")) {
+        errorMessage = "There was a network error. Please check your internet connection.";
+      } else {
+        errorMessage = "An unexpected error occurred. Please try again.";
+      }
+    }
+
     toast({
       title: "API Error",
-      description: "There was an error connecting to the AI service. Please try again later.",
+      description: errorMessage,
       variant: "destructive",
     });
     throw error;
   }
 };
-
