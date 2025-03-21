@@ -27,7 +27,6 @@ const Header = () => {
             href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
             whileHover={{ y: -2 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
