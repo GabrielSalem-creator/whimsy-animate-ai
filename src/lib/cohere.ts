@@ -18,7 +18,7 @@ export async function chatWithCohere(userMessage: string, systemPrompt?: string)
       body: JSON.stringify({
         model: COHERE_MODEL,
         message: userMessage,
-        preamble: systemPrompt || "Keep your responses brief and concise, under 3 sentences when possible."
+        preamble: systemPrompt || "Please respond without using any code formatting or code blocks. Keep your responses brief and concise, under 3 sentences when possible."
       })
     });
     
@@ -29,11 +29,8 @@ export async function chatWithCohere(userMessage: string, systemPrompt?: string)
     const data = await response.json();
     console.log('Received response from Cohere:', data);
     
-    // Extract and clean the AI's response
-    const rawResponse = data.text || "I couldn't generate a response. Please try again.";
-    const cleanedResponse = rawResponse.replace(/```(html)?\s*|\s*```/g, '').trim(); // Remove ```html and ```
-
-    return cleanedResponse;
+    // Extract and return the AI's response
+    return data.text || "I couldn't generate a response. Please try again.";
   } catch (error) {
     console.error('Error calling Cohere API:', error);
     toast.error('Failed to connect to AI service');
