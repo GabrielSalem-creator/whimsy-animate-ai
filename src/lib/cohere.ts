@@ -29,8 +29,11 @@ export async function chatWithCohere(userMessage: string, systemPrompt?: string)
     const data = await response.json();
     console.log('Received response from Cohere:', data);
     
-    // Extract and return the AI's response
-    return data.text || "I couldn't generate a response. Please try again.";
+    // Extract and clean the AI's response
+    const rawResponse = data.text || "I couldn't generate a response. Please try again.";
+    const cleanedResponse = rawResponse.replace(/```(html)?\s*|\s*```/g, '').trim(); // Remove ```html and ```
+
+    return cleanedResponse;
   } catch (error) {
     console.error('Error calling Cohere API:', error);
     toast.error('Failed to connect to AI service');
