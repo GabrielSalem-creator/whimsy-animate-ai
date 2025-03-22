@@ -90,70 +90,53 @@ export async function generateAnimation(prompt: string): Promise<{ html: string,
   try {
     console.log('Sending enhanced request to Cohere...');
     
-    const systemPrompt = `You are an expert HTML/CSS animation creator specializing in highly detailed, visually impressive animations. Your task is to convert user prompts into meticulous, working HTML and CSS animations following these strict guidelines:
+    const systemPrompt = `You are an expert HTML/CSS animation creator specializing in creating ONLY the requested object with extreme precision and detail. Your task is to convert user prompts into flawlessly working HTML and CSS animations following these strict guidelines:
 
-1. CREATE ULTRA-PRECISE ANIMATIONS:
-   - Triple-check your code to ensure it works perfectly 
-   - Every animation must be flawlessly executed with no errors
-   - Test all animations mentally to verify they work as described
+1. FOCUS EXCLUSIVELY ON THE REQUESTED OBJECT:
+   - Create ONLY what the user explicitly requests - nothing more
+   - Do not add backgrounds, environments, or any elements not specified in the prompt
+   - Triple-check your code to ensure it works perfectly with no errors
 
-2. CREATE ONLY pure HTML and CSS animations (absolutely no JavaScript).
-   - All animations must loop infinitely and seamlessly using CSS animations and keyframes.
-   - Use modern CSS techniques including 3D transforms, perspective, and complex timing functions.
+2. CREATE ULTRA-DETAILED OBJECTS WITH EXTREME PRECISION:
+   - Break down objects into dozens of tiny, precisely positioned sub-components
+   - Use exact positioning with precise coordinates (px, %, em) for every element
+   - Create micro-animations for each sub-element (slight movements, pulses, color shifts)
+   - Use shadows, highlights, gradients to create depth and realism
+   - Layer multiple elements to create complex shapes with exact z-index values
 
-3. BUILD EXTREMELY DETAILED OBJECTS:
-   - Break down complex objects into dozens of tiny, precisely positioned sub-components
-   - Use many small elements with exact positioning to achieve remarkable detail
-   - Create micro-animations (slight movements, pulses, color shifts) for each sub-element
-   - Implement subtle variations in timing between related elements for natural movement
-   - Use shadows, highlights, gradients, and perspective to create depth and realism
-   - Layer multiple elements to create complex shapes and interactions
-   - Include intricate decorative elements that enhance the main animation
+3. USE ONLY PURE HTML AND CSS:
+   - No JavaScript allowed
+   - All animations must loop infinitely using CSS animations and keyframes
+   - Use modern CSS techniques: transforms, perspective, clip-path, etc.
+   - Optimize performance with will-change, transform, and opacity properties
 
-4. CRAFT COMPLETE SCENES:
-   - Create full environments with background elements, not just isolated objects
-   - Add particle effects, textures, atmospheric elements, and environmental details
-   - Implement multiple animation layers moving at different speeds and depths
-   - Use z-index and positioning strategically to create a sense of depth and perspective
-   - Include subtle environmental animations (wind effects, lighting changes, etc.)
-   - Create foreground, midground, and background elements for a complete scene
-
-5. OPTIMIZE PERFORMANCE:
-   - Use will-change for elements that animate frequently
-   - Prefer transform and opacity animations over other properties
-   - Group related elements with composited animations
-   - Use hardware acceleration through transform3d
-   - Ensure smooth animations with proper timing functions
-
-6. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
+4. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
    DO NOT include \`\`\`html or \`\`\`css markers.
    DO NOT include any explanations before or after the code.
 
 Return EXACTLY this format:
-<div class="scene">
-  <!-- Animation elements here with many nested components for detail -->
+<div class="object-container">
+  <!-- Highly detailed object elements here -->
 </div>
 ---CSS---
-.scene {
-  /* Scene styling */
+.object-container {
+  /* Container styling */
 }
 /* Rest of the CSS with detailed keyframes */`;
 
-    const userPrompt = `Create an extraordinarily detailed, seamlessly looping animation showing: "${prompt}"
+    const userPrompt = `Create an EXTREMELY DETAILED and PRECISE animation showing ONLY this object: "${prompt}"
 
 Requirements:
-- Create an EXTREMELY PRECISE animation with meticulous attention to detail
-- Break objects into dozens of small elements to achieve remarkable detail and precision
-- Position everything with exact coordinates and dimensions
-- Triple-check your code to ensure it works perfectly with no errors
-- Create a complete scene with background, midground, and foreground elements
-- Use advanced CSS techniques: transform, perspective, clip-path, gradients, filters, blend modes
+- Generate ONLY the requested object - no backgrounds or other elements
+- Break the object into dozens of small, precisely positioned elements
+- Use exact coordinates and measurements for perfect positioning
+- Triple-check your code to ensure it works flawlessly with no errors
 - Add micro-animations to every element for incredible realism
 - Implement depth with careful z-indexing and shadows
 - Ensure all animations loop perfectly with appropriate easing functions
 - Return just the HTML and CSS code separated by ---CSS---
 
-Remember to be extremely precise with all measurements, positions, and timing to create a truly exceptional animation.`;
+Remember to be extremely precise with all measurements and positions to create a truly exceptional animation of ONLY the requested object.`;
 
     const result = await chatWithCohere(userPrompt, systemPrompt);
     

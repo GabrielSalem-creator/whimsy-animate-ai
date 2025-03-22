@@ -17,9 +17,21 @@ const AnimationPreviewCard = ({ html, css }: AnimationPreviewCardProps) => {
         doc.write(`
           <html>
             <head>
-              <style>${css}</style>
+              <style>
+                body {
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  height: 100vh;
+                  background: transparent;
+                  overflow: hidden;
+                }
+                ${css}
+              </style>
             </head>
-            <body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:transparent;">
+            <body>
               ${html}
             </body>
           </html>
