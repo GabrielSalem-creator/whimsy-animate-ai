@@ -15,25 +15,29 @@ type AnimationPreviewProps = {
 const AnimationPreview = ({ html, css, isGenerating, onRegenerate }: AnimationPreviewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
+  // Clean up code block markers if present
+  const cleanHtml = html?.replace(/```html|```/g, '').trim();
+  const cleanCss = css?.replace(/```css|```/g, '').trim();
+  
   useEffect(() => {
-    if (iframeRef.current && html && css) {
+    if (iframeRef.current && cleanHtml && cleanCss) {
       const doc = iframeRef.current.contentDocument;
       if (doc) {
         doc.open();
         doc.write(`
           <html>
             <head>
-              <style>${css}</style>
+              <style>${cleanCss}</style>
             </head>
             <body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:transparent;">
-              ${html}
+              ${cleanHtml}
             </body>
           </html>
         `);
         doc.close();
       }
     }
-  }, [html, css]);
+  }, [cleanHtml, cleanCss]);
 
   const handleDownload = () => {
     // Create combined HTML file with embedded CSS
@@ -45,11 +49,11 @@ const AnimationPreview = ({ html, css, isGenerating, onRegenerate }: AnimationPr
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Generated Animation</title>
   <style>
-${css}
+${cleanCss}
   </style>
 </head>
 <body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;">
-${html}
+${cleanHtml}
 </body>
 </html>`;
 
@@ -133,7 +137,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">HTML</h4>
                     </div>
-                    <pre className="text-xs whitespace-pre-wrap">{html}</pre>
+                    <pre className="text-xs whitespace-pre-wrap">{cleanHtml}</pre>
                   </div>
                   
                   <div className="rounded-lg bg-secondary/30 p-4 overflow-auto max-h-[300px]">
@@ -141,7 +145,7 @@ ${html}
                       <Code className="w-4 h-4 mr-2 text-muted-foreground" />
                       <h4 className="text-sm font-medium">CSS</h4>
                     </div>
-                    <pre className="text-xs whitespace-pre-wrap">{css}</pre>
+                    <pre className="text-xs whitespace-pre-wrap">{cleanCss}</pre>
                   </div>
                 </div>
               </TabsContent>
