@@ -97,20 +97,36 @@ export async function generateAnimation(prompt: string): Promise<{ html: string,
    - Do not add backgrounds, environments, or any elements not specified in the prompt
    - Triple-check your code to ensure it works perfectly with no errors
 
-2. CREATE ULTRA-DETAILED OBJECTS WITH EXTREME PRECISION:
+2. CREATE ULTRA-DETAILED OBJECTS WITH SMOOTH ORGANIC SHAPES:
+   - Avoid using only basic rectangles and squares - use border-radius extensively for smooth corners
+   - Use clip-path, border-radius, and curved SVG paths to create organic, flowing shapes
+   - Utilize bezier curves (cubic-bezier) for natural easing in animations
    - Break down objects into dozens of tiny, precisely positioned sub-components
    - Use exact positioning with precise coordinates (px, %, em) for every element
-   - Create micro-animations for each sub-element (slight movements, pulses, color shifts)
-   - Use shadows, highlights, gradients to create depth and realism
-   - Layer multiple elements to create complex shapes with exact z-index values
+   - Create perfect layering with z-index to give the object depth and dimension
 
-3. USE ONLY PURE HTML AND CSS:
+3. PERFECT POSITION AND MOVEMENT:
+   - Position each element with pixel-perfect precision in relation to other elements
+   - Ensure all sub-components move in harmony with proper timing offsets
+   - Use translate3d and transform-origin for smoother movements
+   - Create micro-animations for each sub-element (subtle movements, pulses, color shifts)
+   - Implement timing functions that feel natural and fluid
+   - Ensure proper perspective and scale for 3D-like effects when appropriate
+
+4. COLORS AND VISUAL DETAIL:
+   - Use rich color palettes with gradients, not just flat colors
+   - Implement subtle shadows and highlights to create depth and volume
+   - Use opacity variations and blend modes for more realistic effects
+   - Implement fine details like texture, grain, or patterns where appropriate
+   - Use HSLA or RGBA colors to allow for transparency effects
+
+5. USE ONLY PURE HTML AND CSS:
    - No JavaScript allowed
    - All animations must loop infinitely using CSS animations and keyframes
    - Use modern CSS techniques: transforms, perspective, clip-path, etc.
    - Optimize performance with will-change, transform, and opacity properties
 
-4. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
+6. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
    DO NOT include \`\`\`html or \`\`\`css markers.
    DO NOT include any explanations before or after the code.
 
@@ -128,15 +144,19 @@ Return EXACTLY this format:
 
 Requirements:
 - Generate ONLY the requested object - no backgrounds or other elements
+- Use SMOOTH, ORGANIC SHAPES with curved edges and flowing forms - avoid basic rectangles and squares
+- Create perfect positioning with each element precisely placed in relation to others
 - Break the object into dozens of small, precisely positioned elements
-- Use exact coordinates and measurements for perfect positioning
-- Triple-check your code to ensure it works flawlessly with no errors
+- Use advanced CSS techniques like clip-path, SVG paths and border-radius for natural, flowing shapes
+- Add detailed visual elements: shadows, highlights, gradients, subtle textures
+- Create natural movement with bezier curve easing and proper timing
 - Add micro-animations to every element for incredible realism
 - Implement depth with careful z-indexing and shadows
 - Ensure all animations loop perfectly with appropriate easing functions
+- Triple-check your code to ensure it works flawlessly with no errors
 - Return just the HTML and CSS code separated by ---CSS---
 
-Remember to be extremely precise with all measurements and positions to create a truly exceptional animation of ONLY the requested object.`;
+Remember to be extremely precise with all measurements and positions to create a truly exceptional animation of ONLY the requested object, with smooth organic shapes and perfect movement.`;
 
     const result = await chatWithCohere(userPrompt, systemPrompt);
     
