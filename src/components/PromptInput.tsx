@@ -5,7 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowRight, Sparkles } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
-import { generateAnimation } from '@/lib/cohere';
+import { generateAnimation, saveAnimation } from '@/lib/cohere';
+import { Input } from "@/components/ui/input";
 
 type PromptInputProps = {
   onGenerateAnimation: (html: string, css: string) => void;
@@ -15,6 +16,7 @@ type PromptInputProps = {
 
 const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: PromptInputProps) => {
   const [prompt, setPrompt] = useState('');
+  const [title, setTitle] = useState('');
   const { toast } = useToast();
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,10 +35,15 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
     
     try {
       const { html, css } = await generateAnimation(prompt);
+      
+      // Save the animation to local storage
+      saveAnimation(title || prompt.substring(0, 30), prompt, html, css);
+      
       onGenerateAnimation(html, css);
+      
       toast({
         title: "Animation created!",
-        description: "Your animation has been generated successfully",
+        description: "Your animation has been generated successfully and saved to your gallery.",
       });
     } catch (error) {
       console.error("Error generating animation:", error);
@@ -60,8 +67,16 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
       <div className="bg-white rounded-2xl p-1 shadow-smooth">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
+            <Input
+              placeholder="Title for your animation (optional)"
+              className="rounded-xl border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/20 bg-secondary/50 mb-2"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={isGenerating}
+            />
+            
             <Textarea
-              placeholder="Describe your animation... (e.g., 'A cat jumping over a fence')"
+              placeholder="Describe your animation... (e.g., 'A detailed cat jumping over a fence')"
               className="min-h-[120px] p-4 rounded-xl border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/20 resize-none text-base transition-all duration-200 bg-secondary/50 placeholder:text-muted-foreground/70"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -69,7 +84,7 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
             />
             
             <motion.div 
-              className="absolute top-3 left-3 bg-primary/10 text-primary/80 text-xs font-medium px-2 py-1 rounded-full"
+              className="absolute top-12 left-3 bg-primary/10 text-primary/80 text-xs font-medium px-2 py-1 rounded-full"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
@@ -104,7 +119,7 @@ const PromptInput = ({ onGenerateAnimation, isGenerating, setIsGenerating }: Pro
       </div>
       
       <div className="mt-3 text-xs text-center text-muted-foreground">
-        <p>Animations are generated using the Cohere AI model and might take a few seconds.</p>
+        <p>Animations are generated using the Cohere AI model and might take a few seconds. All created animations are saved to your gallery.</p>
       </div>
     </motion.div>
   );

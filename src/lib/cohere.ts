@@ -39,42 +39,93 @@ export async function chatWithCohere(userMessage: string, systemPrompt?: string)
   }
 }
 
+// Interface for animation data
+export interface AnimationData {
+  id: string;
+  title: string;
+  prompt: string;
+  html: string;
+  css: string;
+  createdAt: number;
+}
+
+// Function to save animation to local storage
+export function saveAnimation(title: string, prompt: string, html: string, css: string): AnimationData {
+  // Get existing animations
+  const savedAnimations = getSavedAnimations();
+  
+  // Create new animation object
+  const newAnimation: AnimationData = {
+    id: Date.now().toString(),
+    title,
+    prompt,
+    html,
+    css,
+    createdAt: Date.now()
+  };
+  
+  // Add to existing animations
+  const updatedAnimations = [newAnimation, ...savedAnimations];
+  
+  // Save to local storage
+  localStorage.setItem('savedAnimations', JSON.stringify(updatedAnimations));
+  
+  return newAnimation;
+}
+
+// Function to get all saved animations
+export function getSavedAnimations(): AnimationData[] {
+  const saved = localStorage.getItem('savedAnimations');
+  return saved ? JSON.parse(saved) : [];
+}
+
+// Function to delete an animation
+export function deleteAnimation(id: string): void {
+  const savedAnimations = getSavedAnimations();
+  const updatedAnimations = savedAnimations.filter(animation => animation.id !== id);
+  localStorage.setItem('savedAnimations', JSON.stringify(updatedAnimations));
+}
+
 export async function generateAnimation(prompt: string): Promise<{ html: string, css: string }> {
   try {
     console.log('Sending enhanced request to Cohere...');
     
     const systemPrompt = `You are an expert HTML/CSS animation creator specializing in highly detailed, visually impressive animations. Your task is to convert user prompts into meticulous, working HTML and CSS animations following these strict guidelines:
 
-1. Create ONLY pure HTML and CSS animations (absolutely no JavaScript).
-2. Make all animations loop infinitely and seamlessly using CSS animations and keyframes.
-3. Use modern CSS techniques including:
-   - Multiple layered keyframe animations with different timing functions
-   - Use of transform, opacity, filter, and clip-path for performance
-   - CSS variables for flexible animation control
-   - Complex pseudo-elements for added details without extra HTML
-   - Blend modes and gradients for sophisticated visual effects
+1. CREATE ULTRA-PRECISE ANIMATIONS:
+   - Triple-check your code to ensure it works perfectly 
+   - Every animation must be flawlessly executed with no errors
+   - Test all animations mentally to verify they work as described
 
-4. BUILD DETAILED OBJECTS:
-   - Break down complex objects into many small, precise sub-components
-   - Use dozens of tiny elements with specific positioning to create intricate details
+2. CREATE ONLY pure HTML and CSS animations (absolutely no JavaScript).
+   - All animations must loop infinitely and seamlessly using CSS animations and keyframes.
+   - Use modern CSS techniques including 3D transforms, perspective, and complex timing functions.
+
+3. BUILD EXTREMELY DETAILED OBJECTS:
+   - Break down complex objects into dozens of tiny, precisely positioned sub-components
+   - Use many small elements with exact positioning to achieve remarkable detail
+   - Create micro-animations (slight movements, pulses, color shifts) for each sub-element
    - Implement subtle variations in timing between related elements for natural movement
-   - Use shadows, highlights, and perspective to create depth
-   - Add micro-animations (slight movements, pulses, color shifts) for realism
+   - Use shadows, highlights, gradients, and perspective to create depth and realism
+   - Layer multiple elements to create complex shapes and interactions
+   - Include intricate decorative elements that enhance the main animation
 
-5. CRAFT THE SCENE:
-   - Create a complete environment with background elements, not just isolated objects
-   - Add particle effects, textures, and atmospheric elements
-   - Implement multiple animation layers moving at different speeds
-   - Use z-index and positioning to create a sense of depth and perspective
+4. CRAFT COMPLETE SCENES:
+   - Create full environments with background elements, not just isolated objects
+   - Add particle effects, textures, atmospheric elements, and environmental details
+   - Implement multiple animation layers moving at different speeds and depths
+   - Use z-index and positioning strategically to create a sense of depth and perspective
    - Include subtle environmental animations (wind effects, lighting changes, etc.)
+   - Create foreground, midground, and background elements for a complete scene
 
-6. PERFORMANCE OPTIMIZATION:
+5. OPTIMIZE PERFORMANCE:
    - Use will-change for elements that animate frequently
    - Prefer transform and opacity animations over other properties
    - Group related elements with composited animations
    - Use hardware acceleration through transform3d
+   - Ensure smooth animations with proper timing functions
 
-7. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
+6. Return ONLY the raw HTML and CSS code, separated by "---CSS---".
    DO NOT include \`\`\`html or \`\`\`css markers.
    DO NOT include any explanations before or after the code.
 
@@ -88,17 +139,21 @@ Return EXACTLY this format:
 }
 /* Rest of the CSS with detailed keyframes */`;
 
-    const userPrompt = `Create a captivating, looping animation showing: "${prompt}"
+    const userPrompt = `Create an extraordinarily detailed, seamlessly looping animation showing: "${prompt}"
 
 Requirements:
-- Create an extremely detailed, visually appealing scene using only HTML and CSS (no JavaScript)
-- Break down all objects into many small, precisely positioned elements to achieve remarkable detail
-- Create natural movement with multiple layered animations running at different speeds and timings
-- Use advanced CSS techniques: transform, clip-path, gradients, filters, and blend modes
-- Add micro-animations and subtle details for realism (shadows, highlights, particle effects)
-- Implement depth and perspective using z-indexing and creative positioning
+- Create an EXTREMELY PRECISE animation with meticulous attention to detail
+- Break objects into dozens of small elements to achieve remarkable detail and precision
+- Position everything with exact coordinates and dimensions
+- Triple-check your code to ensure it works perfectly with no errors
+- Create a complete scene with background, midground, and foreground elements
+- Use advanced CSS techniques: transform, perspective, clip-path, gradients, filters, blend modes
+- Add micro-animations to every element for incredible realism
+- Implement depth with careful z-indexing and shadows
 - Ensure all animations loop perfectly with appropriate easing functions
-- Return just the HTML and CSS code separated by ---CSS---`;
+- Return just the HTML and CSS code separated by ---CSS---
+
+Remember to be extremely precise with all measurements, positions, and timing to create a truly exceptional animation.`;
 
     const result = await chatWithCohere(userPrompt, systemPrompt);
     

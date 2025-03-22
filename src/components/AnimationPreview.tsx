@@ -2,8 +2,9 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { Download, RefreshCw, Code } from 'lucide-react';
+import { Download, RefreshCw, Code, Images } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from 'react-router-dom';
 
 type AnimationPreviewProps = {
   html: string;
@@ -83,7 +84,15 @@ ${cleanHtml}
       {(html && css) ? (
         <>
           <div className="bg-white rounded-2xl p-6 shadow-smooth">
-            <h3 className="text-xl font-medium mb-4">Your Animation</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-medium">Your Animation</h3>
+              <Link to="/gallery">
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <Images className="w-4 h-4 mr-2" />
+                  <span>View Gallery</span>
+                </Button>
+              </Link>
+            </div>
             
             <div className="aspect-video bg-secondary/30 rounded-lg overflow-hidden mb-6">
               <iframe 
@@ -125,7 +134,7 @@ ${cleanHtml}
               <TabsContent value="preview" className="mt-0">
                 <div className="flex justify-center items-center p-4">
                   <p className="text-sm text-muted-foreground text-center">
-                    Your animation is displayed above. Download it or view the code.
+                    Your animation is displayed above. Download it or view the code. All animations are saved to your gallery.
                   </p>
                 </div>
               </TabsContent>

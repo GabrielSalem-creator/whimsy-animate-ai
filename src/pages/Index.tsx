@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import PromptInput from '@/components/PromptInput';
 import AnimationPreview from '@/components/AnimationPreview';
-import { ArrowDown, Wand2 } from 'lucide-react';
+import { ArrowDown, Wand2, Images } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   const [htmlCode, setHtmlCode] = useState('');
@@ -40,14 +42,30 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
           >
-            <motion.div 
-              className="inline-block mb-4 p-1 rounded-full bg-primary/10"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-            >
-              <Wand2 className="w-6 h-6 text-primary" />
-            </motion.div>
+            <div className="flex justify-center mb-4">
+              <motion.div 
+                className="inline-block p-1 rounded-full bg-primary/10"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+              >
+                <Wand2 className="w-6 h-6 text-primary" />
+              </motion.div>
+              
+              <Link to="/gallery" className="ml-4">
+                <motion.div 
+                  className="inline-block p-1 rounded-full bg-primary/10"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Button variant="ghost" size="icon" className="h-6 w-6 p-0">
+                    <Images className="w-6 h-6 text-primary" />
+                  </Button>
+                </motion.div>
+              </Link>
+            </div>
             
             <motion.h1 
               className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-balance mb-4"
@@ -66,6 +84,20 @@ const Index = () => {
             >
               Transform your descriptions into beautiful, looping HTML & CSS animations with the power of AI. No coding required.
             </motion.p>
+            
+            <motion.div 
+              className="mt-4 flex justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              <Link to="/gallery">
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <Images className="w-4 h-4 mr-2" />
+                  View Animation Gallery
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
           
           <motion.div 
@@ -112,8 +144,8 @@ const Index = () => {
                 icon: "✨"
               },
               {
-                title: "Download & Use",
-                description: "Preview your animation and download the code to use anywhere.",
+                title: "Save & Use",
+                description: "Preview your animation, save it to your gallery, or download the code to use anywhere.",
                 icon: "💾"
               }
             ].map((step, index) => (
