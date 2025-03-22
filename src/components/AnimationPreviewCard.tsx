@@ -29,10 +29,20 @@ const AnimationPreviewCard = ({ html, css }: AnimationPreviewCardProps) => {
                   overflow: hidden;
                   width: 100%;
                 }
-                /* Enable smooth animations */
+                /* Enable smooth animations and improve rendering */
                 * {
                   transform-style: preserve-3d;
                   backface-visibility: hidden;
+                  box-sizing: border-box;
+                }
+                /* Ensure the animation container maintains proper dimensions */
+                .object-container {
+                  position: relative;
+                  width: auto;
+                  height: auto;
+                  transform-origin: center center;
+                  max-width: 100%;
+                  max-height: 100%;
                 }
                 ${css}
               </style>
